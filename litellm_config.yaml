@@ -1,0 +1,91 @@
+# litellm_config.yaml
+# Claude Code on Bedrock - LiteLLM Proxy Configuration
+# Region: ap-south-1 (Mumbai) | Bedrock models via global inference
+
+model_list:
+  - model_name: claude-sonnet-4-6
+    litellm_params:
+      model: bedrock/converse/arn:aws:bedrock:ap-south-1:xxx:inference-profile/global.anthropic.claude-sonnet-4-6
+      aws_region_name: ap-south-1
+    model_info:
+      max_tokens: 64000
+      max_input_tokens: 1000000
+      input_cost_per_token: 0.000003
+      output_cost_per_token: 0.000015
+
+  - model_name: claude-haiku-4-5-20251001
+    litellm_params:
+      model: bedrock/converse/arn:aws:bedrock:ap-south-1:xxx:inference-profile/global.anthropic.claude-haiku-4-5-20251001-v1:0
+      aws_region_name: ap-south-1
+    model_info:
+      max_tokens: 64000
+      max_input_tokens: 200000
+      input_cost_per_token: 0.000001
+      output_cost_per_token: 0.000005
+
+  - model_name: claude-opus-4-8
+    litellm_params:
+      model: bedrock/converse/arn:aws:bedrock:ap-south-1:xxx:inference-profile/global.anthropic.claude-opus-4-7
+      aws_region_name: ap-south-1
+    model_info:
+      max_tokens: 128000
+      max_input_tokens: 1000000
+      input_cost_per_token: 0.000005
+      output_cost_per_token: 0.000025
+
+litellm_settings:
+  force_streaming: true
+  drop_params: true
+  modify_params: true
+  additional_drop_params: ["thinking"]
+  filter_empty_content_blocks: true
+  set_verbose: true
+  log_responses: true
+  #max_budget: 5000         # Global monthly budget cap in USD
+  num_retries: 3
+  request_timeout: 300     # 5-minute timeout (for long code generation)
+  #CloudWatch callbacks - sends every request to CloudWatch Logs
+  callbacks: custom_callback.proxy_handler_instance
+
+general_settings:
+  master_key: "sk-xxx-xxx"
+  database_url: "postgresql://litellm_admin:xxx@litellm-db.xxx.ap-south-1.rds.amazonaws.com:5432/litellm"
+  store_model_in_db: true
+  disable_spend_logs: false    # Keep true for spend tracking
+  enable_pre_request_budget_check: false
+  # Increase internal rate limits
+  global_max_parallel_requests: 100
+  internal_user_budget_duration: null
+  
+
+environment_variables:
+  AWS_REGION_NAME: "ap-south-1"
+  CW_LOG_GROUP_NAME: "/litellm/claude-code-usage"
+  LITELLM_DROP_EMPTY_CONTENT_BLOCKS: "true"
+
+# ===== DASHBOARD SETTINGS (LiteLLM proxy ignores this section) =====
+dashboard_settings:
+  # Default budgets and limits for new users/teams
+  defaults:
+    user_budget: 50.0          # USD per month
+    user_tpm: 200000           # Tokens per minute
+    user_rpm: 60               # Requests per minute
+    team_budget: 500.0         # USD per team
+    team_tpm: 500000           # Tokens per minute per team
+    team_rpm: 100              # Requests per minute per team
+
+  # Default models for new users (subset of model_list)
+  default_user_models:
+    - claude-sonnet-4-6
+    - claude-haiku-4-5-20251001
+    - claude-opus-4-8
+
+  # Default models for new teams (subset of model_list)
+  default_team_models:
+    - claude-sonnet-4-6
+    - claude-haiku-4-5-20251001
+    - claude-opus-4-8
+
+  # AWS regions available in "Add Model" dropdown
+  aws_regions:
+    - ap-south-1

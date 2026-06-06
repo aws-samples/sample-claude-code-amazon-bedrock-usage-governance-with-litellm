@@ -1,0 +1,62 @@
+version: "3.9"
+services:
+  litellm:
+    image: ghcr.io/berriai/litellm:v1.88.0-rc.1
+    container_name: litellm
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./litellm_config.yaml:/app/config.yaml
+      - ./custom_callback.py:/app/custom_callback.py
+    environment:
+      - DATABASE_URL=postgresql://litellm_admin:xxx@litellm-db.xxx.ap-south-1.rds.amazonaws.com:5432/litellm
+      - LITELLM_MASTER_KEY=
+      - AWS_REGION_NAME=ap-south-1
+      - CW_LOG_GROUP_NAME=/litellm/claude-code-usage
+      # EC2 instance profile credentials are used automatically (no AWS keys needed)
+    command: ["--config", "/app/config.yaml", "--port", "4000", "--num_workers", "1"]
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:4000/health/liveliness')\""]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
+
+  litellm-admin-dashboard:
+    build: ./litellm-admin-dashboard
+    container_name: litellm-admin-dashboard
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./litellm_config.yaml:/app/config.yaml
+      - ./litellm-admin-dashboard:/app
+    environment:
+      - LITELLM_BASE_URL=http://litellm:4000
+      - LITELLM_MASTER_KEY=sk-xxx-xxx
+      - DATABASE_URL=postgresql://litellm_admin:xxx@litellm-db.xxx.ap-south-1.rds.amazonaws.com:5432/litellm
+      - AWS_REGION_NAME=ap-south-1
+      - IDENTITY_STORE_ID= # From IAM Identity Center settings
+      - CW_LOG_GROUP_NAME=/litellm/claude-code-usage
+      - STREAMLIT_SERVER_HEADLESS=true
+    depends_on:
+      litellm:
+        condition: service_healthy
+    restart: always
+  
+  # ===== NEW: Claude Chat App =====
+  claude-chat:
+    build: ./claude-chat-app
+    container_name: claude-chat
+    ports:
+      - "8502:8501"
+    environment:
+      - LITELLM_BASE_URL=http://litellm:4000
+      - DEFAULT_MODEL=claude-sonnet-4-6
+      - SEARCH_PROVIDER=duckduckgo
+      - STREAMLIT_SERVER_HEADLESS=true
+      - LITELLM_MASTER_KEY=sk-xxx-xxx
+    depends_on:
+      litellm:
+        condition: service_healthy
+    restart: always

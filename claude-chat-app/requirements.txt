@@ -1,0 +1,11 @@
+# Claude Chat App - Python Dependencies
+# NOTE: openai package is used as HTTP client for LiteLLM only.
+# No data goes to OpenAI. All requests route to http://litellm:4000/v1
+
+streamlit>=1.37.0          # Web UI framework
+openai>=1.30.0             # OpenAI-compatible client for LiteLLM proxy
+PyPDF2>=3.0.0              # PDF text extraction
+python-docx>=0.8.11        # Word document (.docx) extraction
+openpyxl>=3.1.2            # Excel spreadsheet (.xlsx) extraction
+Pillow>=10.0.0             # Image handling
+requests>=2.31.0           # LiteLLM API calls + DuckDuckGo web search
