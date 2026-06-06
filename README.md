@@ -35,6 +35,9 @@ Developers / Claude Code / Chat App
 An admin dashboard (Streamlit, port 8501) gives ops/platform teams a GUI for the entire lifecycle. A self-service chat app (Streamlit, port 8502) gives end users a governed Claude Chat interface.
 
 ---
+## Architecture
+
+![Architecture](Claude Code Multi-User Access Architecture.png)
 
 ## Key Capabilities
 
