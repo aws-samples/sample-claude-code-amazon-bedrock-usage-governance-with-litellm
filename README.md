@@ -16,7 +16,7 @@ When an enterprise rolls out Claude Code (or any LLM-based developer tool) acros
 
 ## The Solution
 
-This platform sits between your developers and Bedrock, adding a governance and observability layer without changing how developers use Claude Code or any OpenAI-compatible tool.
+This Solution sits between your developers and Bedrock, adding a governance and observability layer without changing how developers use Claude Code.
 
 ```
 Developers / Claude Code / Chat App
