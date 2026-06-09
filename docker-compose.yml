@@ -9,8 +9,8 @@ services:
       - ./litellm_config.yaml:/app/config.yaml
       - ./custom_callback.py:/app/custom_callback.py
     environment:
-      - DATABASE_URL=postgresql://litellm_admin:xxx@litellm-db.xxx.ap-south-1.rds.amazonaws.com:5432/litellm
-      - LITELLM_MASTER_KEY=
+      - DATABASE_URL=postgresql://litellm_admin:password@litellm-db.rdsgk.ap-south-1.rds.amazonaws.com:5432/litellm
+      - LITELLM_MASTER_KEY=sk-litellm-key
       - AWS_REGION_NAME=ap-south-1
       - CW_LOG_GROUP_NAME=/litellm/claude-code-usage
       # EC2 instance profile credentials are used automatically (no AWS keys needed)
@@ -33,12 +33,13 @@ services:
       - ./litellm-admin-dashboard:/app
     environment:
       - LITELLM_BASE_URL=http://litellm:4000
-      - LITELLM_MASTER_KEY=sk-xxx-xxx
-      - DATABASE_URL=postgresql://litellm_admin:xxx@litellm-db.xxx.ap-south-1.rds.amazonaws.com:5432/litellm
+      - LITELLM_MASTER_KEY=sk-litellm-key
+      - DATABASE_URL=postgresql://litellm_admin:password@litellm-db.rdsgk.ap-south-1.rds.amazonaws.com:5432/litellm
       - AWS_REGION_NAME=ap-south-1
-      - IDENTITY_STORE_ID= # From IAM Identity Center settings
+      - IDENTITY_STORE_ID=d-xxxx # From IAM Identity Center settings
       - CW_LOG_GROUP_NAME=/litellm/claude-code-usage
       - STREAMLIT_SERVER_HEADLESS=true
+      - STREAMLIT_SERVER_BASE_URL_PATH=/admin
     depends_on:
       litellm:
         condition: service_healthy
@@ -55,7 +56,8 @@ services:
       - DEFAULT_MODEL=claude-sonnet-4-6
       - SEARCH_PROVIDER=duckduckgo
       - STREAMLIT_SERVER_HEADLESS=true
-      - LITELLM_MASTER_KEY=sk-xxx-xxx
+      - STREAMLIT_SERVER_BASE_URL_PATH=/chat
+      - LITELLM_MASTER_KEY=sk-litellm-key
     depends_on:
       litellm:
         condition: service_healthy
