@@ -321,7 +321,7 @@ Follow these steps to create a custom SAML 2.0 application in IAM Identity Cente
 6. Note the Provider ARN: `arn:aws:iam::<ACCOUNT_ID>:saml-provider/IAMIdentityCenter-ClientVPN`
 
 Create NAT gateway and add it to the route table of the private subnet.
-> Destination ip address while adding route in route table is [IP_ADDRESS]
+> Destination ip address while adding route in route table is 0.0.0.0
 
 ### 5.5: Create Client VPN Endpoint
 
