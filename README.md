@@ -1,6 +1,6 @@
 # Sample Claude Code through Amazon Bedrock — Usage governance with LiteLLM & Streamlit UI
 
-The solution to centrally govern, administer, and monitor Claude AI access for engineering teams using **Amazon Bedrock** as the inference backend and **LiteLLM** as the proxy layer.
+The solution to centrally govern, administer, and monitor Claude AI access for developers using **Amazon Bedrock** as the inference backend and **LiteLLM** as the proxy layer.
 
 ---
 
