@@ -37,7 +37,7 @@ An admin dashboard (Streamlit, port 8501) gives ops/platform teams a GUI for the
 ---
 ## Architecture
 
-![Architecture](ClaudeCodeMultiUserAccessArchitecture.png)
+![Architecture](Claude_code_MultiUser_AmazonBedrock.jpg)
 
 ## Key Capabilities
 
